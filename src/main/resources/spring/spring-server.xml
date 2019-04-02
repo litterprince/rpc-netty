@@ -6,7 +6,7 @@
         <property name="port" value="8080"/>
         <property name="serverImplMap">
             <map>
-                <entry key="com.spring.service.HelloService" value="com.spring.service.HelloServiceImpl"></entry>
+                <entry key="com.spring.common.service.HelloService" value="com.spring.common.service.HelloServiceImpl"></entry>
             </map>
         </property>
     </bean>
