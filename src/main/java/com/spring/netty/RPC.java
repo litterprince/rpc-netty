@@ -2,10 +2,11 @@ package com.spring.netty;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.netty.client.RPCClient;
 import com.spring.netty.config.ClientConfig;
 import com.spring.netty.config.ServerConfig;
-import com.spring.netty.util.Request;
-import com.spring.netty.util.Response;
+import com.spring.netty.message.Request;
+import com.spring.netty.message.Response;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;

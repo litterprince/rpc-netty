@@ -1,8 +1,8 @@
-package com.spring.netty.handler;
+package com.spring.netty.server;
 
 import com.spring.netty.RPC;
-import com.spring.netty.util.Request;
-import com.spring.netty.util.Response;
+import com.spring.netty.message.Request;
+import com.spring.netty.message.Response;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;

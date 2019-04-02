@@ -1,7 +1,8 @@
-package com.spring.netty;
+package com.spring.netty.server;
 
-import com.spring.netty.handler.ServerHandler;
-import com.spring.netty.util.ConstantUtil;
+import com.spring.netty.RPC;
+import com.spring.netty.server.ServerHandler;
+import com.spring.netty.util.RPCConstant;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -28,7 +29,7 @@ public class RPCServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             // TODO: 学习，以换行符分包 防止念包半包 2048为最大长度 到达最大长度没出现换行符则抛出异常
-                            socketChannel.pipeline().addLast(new LineBasedFrameDecoder(ConstantUtil.MSG_MAX_LENGTH));
+                            socketChannel.pipeline().addLast(new LineBasedFrameDecoder(RPCConstant.MSG_MAX_LENGTH));
                             // 将接收到的对象转为字符串
                             socketChannel.pipeline().addLast(new StringDecoder());
                             socketChannel.pipeline().addLast(new ServerHandler());

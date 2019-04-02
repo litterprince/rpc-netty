@@ -1,4 +1,4 @@
-package com.spring.netty.util;
+package com.spring.netty.message;
 
 public class Response {
     private String requestId;

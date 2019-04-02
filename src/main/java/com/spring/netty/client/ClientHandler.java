@@ -1,9 +1,8 @@
-package com.spring.netty.handler;
+package com.spring.netty.client;
 
 import com.spring.netty.RPC;
-import com.spring.netty.RPCClient;
-import com.spring.netty.util.Request;
-import com.spring.netty.util.Response;
+import com.spring.netty.message.Request;
+import com.spring.netty.message.Response;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
