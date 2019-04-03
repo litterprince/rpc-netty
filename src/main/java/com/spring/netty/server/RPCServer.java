@@ -1,7 +1,6 @@
 package com.spring.netty.server;
 
 import com.spring.netty.RPC;
-import com.spring.netty.server.ServerHandler;
 import com.spring.netty.util.RPCConstant;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -15,7 +14,7 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 
 public class RPCServer {
-    public static void start() {
+    public static void connect(){
         // start server netty
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();

@@ -28,5 +28,7 @@ public class ClientConfig implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         RPC.clientContext = applicationContext;
+
+        // TODO: 待续，完成RPCClient里服务信息的初始化
     }
 }
