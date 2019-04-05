@@ -7,22 +7,37 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
-// TODO: 待续，完成zk的连接
-public class ZKConnect implements Watcher {
-    public ZooKeeper serverConnect() {
-        String address = RPC.getServerConfig().getZookeeperHost();
-        ZooKeeper zooKeeper = null;
+// TODO: 完善，是否做成单利模式（后续支持zookeeper集群）
+public class ZKConnect {
+    private ZooKeeper zooKeeper = null;
+
+    private ZooKeeper connect(String host){
+        CountDownLatch latch = new CountDownLatch(1);
         try {
-            zooKeeper = new ZooKeeper(address, Constant.ZK_TIME_OUT, this);
-        } catch (IOException e) {
+            zooKeeper = new ZooKeeper(host, Constant.ZK_TIME_OUT, new Watcher() {
+                @Override
+                public void process(WatchedEvent watchedEvent) {
+                    if (watchedEvent.getState() == Event.KeeperState.SyncConnected) {
+                        latch.countDown();
+                    }
+                }
+            });
+            latch.await();
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return zooKeeper;
     }
 
-    @Override
-    public void process(WatchedEvent watchedEvent) {
+    public ZooKeeper serverConnect() {
+        String host = RPC.getServerConfig().getZookeeperHost();
+        return connect(host);
+    }
 
+    public ZooKeeper clientConnect(){
+        String host = RPC.getClientConfig().getZookeeperHost();
+        return connect(host);
     }
 }

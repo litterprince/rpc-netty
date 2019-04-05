@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class RandomBalance implements LoadBalance {
     @Override
-    public String chooseIP(String serviceName) throws ProvidersNoFoundException {
+    public String chooseAddress(String serviceName) throws ProvidersNoFoundException {
         RPCClient instance = RPCClient.getInstance();
         Set<String> ipSet;
         int ipNum;

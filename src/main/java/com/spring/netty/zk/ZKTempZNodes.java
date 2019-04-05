@@ -7,7 +7,7 @@ import org.apache.zookeeper.ZooKeeper;
 
 import java.util.List;
 
-// TODO: 待续，完成对zk操作的封装
+// TODO: 学习，完成对zk操作的封装
 public class ZKTempZNodes {
     private ZooKeeper zooKeeper;
 

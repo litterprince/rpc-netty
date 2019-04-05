@@ -23,7 +23,7 @@ public class ProxyObject {
                 request.setMethodName(method.getName());
                 request.setParameters(args);//输入的实参
                 RPCClient.getInstance().getRequestLockMap().put(request.getRequestId(),request);
-                RPCClient.connect().send(request);
+                RPCClient.getInstance().send(request);
 
                 RPCClient.getInstance().getRequestLockMap().remove(request.getRequestId());
                 return request.getResult();//目标方法的返回结果

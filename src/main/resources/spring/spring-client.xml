@@ -3,7 +3,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="clientConfig" class="com.spring.netty.config.ClientConfig">
-        <property name="host" value="localhost"/>
+        <property name="host" value="localhost"/><!-- 使用zk后废弃该参数 -->
         <property name="port" value="8080"/>
+        <property name="zookeeperHost" value="127.0.0.1:2181"/>
+        <property name="serviceInterface">
+            <set>
+                <value>com.spring.common.service.HelloService</value>
+            </set>
+        </property>
+        <!-- TODO: 思考，这里接口实现的可配置化 -->
+        <property name="loadBalance" ref="random"/>
     </bean>
+    <bean id="random" class="com.spring.netty.util.impl.RandomBalance"/>
 </beans>

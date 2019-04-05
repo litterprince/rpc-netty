@@ -3,32 +3,18 @@ package com.spring.netty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.netty.client.ProxyObject;
-import com.spring.netty.client.RPCClient;
 import com.spring.netty.config.ClientConfig;
 import com.spring.netty.config.ServerConfig;
 import com.spring.netty.message.Request;
 import com.spring.netty.message.Response;
 import com.spring.netty.server.RPCServer;
-import com.spring.netty.server.ServerHandler;
-import com.spring.netty.util.RPCConstant;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LineBasedFrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
+import com.spring.netty.zk.ZKConnect;
+import com.spring.netty.zk.ZKServerService;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.ZooKeeper;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class RPC {
     public static ApplicationContext serverContext;
@@ -41,9 +27,17 @@ public class RPC {
     }
 
     public static void serverStart() {
-        // TODO: 完成服务的上报和监控
+        // TODO: 关键，服务的上报和监控
+        ZooKeeper zk = new ZKConnect().serverConnect();
+        ZKServerService serverService = new ZKServerService(zk);
+        try {
+            serverService.initZNode();
+            serverService.createServerService();
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        RPCServer.connect();
+        RPCServer.start();
     }
 
     public static ServerConfig getServerConfig(){
