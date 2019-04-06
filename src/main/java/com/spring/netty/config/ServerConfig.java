@@ -8,18 +8,9 @@ import org.springframework.context.ApplicationContextAware;
 import java.util.Map;
 
 public class ServerConfig implements ApplicationContextAware {
-    private int port;
     private String serverHost;
     private String zookeeperHost;
     private Map<String,String> serverImplMap;
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
 
     public String getServerHost() {
         return serverHost;

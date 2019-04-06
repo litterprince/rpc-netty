@@ -51,16 +51,17 @@ public class RPCClient {
         return instance;
     }
 
-    public Channel connect(String ip, int port) {
+    public Channel connect(String address) {
         Channel channel = null;
 
         // 存在channel
-        connectLock.get(ip).readLock().lock();
-        channel = IPChannelInfoMap.get(ip).getChannel();
+        connectLock.get(address).readLock().lock();
+        channel = IPChannelInfoMap.get(address).getChannel();
         if (channel != null) {
-            connectLock.get(ip).readLock().unlock();
+            connectLock.get(address).readLock().unlock();
             return channel;
         }
+        connectLock.get(address).readLock().unlock();
 
         // 不存在channel
         EventLoopGroup group = new NioEventLoopGroup();
@@ -79,14 +80,16 @@ public class RPCClient {
                         }
                     });
 
+            String ip = address.split(":")[0];
+            int port = Integer.parseInt(address.split(":")[1]);
             final ChannelFuture f = b.connect(ip, port).sync();
             channel = f.channel();
-            connectLock.get(ip).writeLock().lock();
+            connectLock.get(address).writeLock().lock();
             IPChannelInfo channelInfo = new IPChannelInfo();
             channelInfo.setGroup(group);
             channelInfo.setChannel(channel);
-            IPChannelInfoMap.putIfAbsent(ip, channelInfo);
-            connectLock.get(ip).writeLock().unlock();
+            IPChannelInfoMap.putIfAbsent(address, channelInfo);
+            connectLock.get(address).writeLock().unlock();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,12 +104,11 @@ public class RPCClient {
     public void send(Request request) throws ProvidersNoFoundException {
         // 选出Ip
         try {
-            String methodName = request.getMethodName();
-            String address = loadBalance.chooseAddress(methodName);
-            String ip = address.split(":")[0];
-            int port = Integer.parseInt(address.split(":")[1]);
+            String className = request.getClassName();
+            String address = loadBalance.chooseAddress(className);
+
             // 通过connect获得channel
-            Channel channel = connect(ip, port);
+            Channel channel = connect(address);
             // 使用channel传递数据
 
             // TODO: 待续，没有阻塞等待连接完成

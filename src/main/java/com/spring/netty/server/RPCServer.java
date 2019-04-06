@@ -35,8 +35,9 @@ public class RPCServer {
                         }
                     });
 
-            ChannelFuture future = b.bind(RPC.getServerConfig().getPort()).sync();
-            System.out.println("server start on port:"+RPC.getServerConfig().getPort());
+            String[] serverHost = RPC.getServerConfig().getServerHost().split(":");
+            ChannelFuture future = b.bind(serverHost[0], Integer.parseInt(serverHost[1])).sync();
+            System.out.println("server start on:"+RPC.getServerConfig().getServerHost());
             // 同步等待服务端监听端口关闭
             future.channel().closeFuture().sync();
         } catch (Exception e){
