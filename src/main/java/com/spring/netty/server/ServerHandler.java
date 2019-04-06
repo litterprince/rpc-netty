@@ -38,7 +38,6 @@ public class ServerHandler extends ChannelHandlerAdapter {
     public static Object invoke(Request request){
         Object result = null;
         String implClassName = RPC.getServerConfig().getServerImplMap().get(request.getClassName());
-        // TODO: 思考，这里的Map里面存储的impl类名和存储class对象哪个更好
         try {
             Class clazz = Class.forName(implClassName);
             Object[] parameters = request.getParameters();

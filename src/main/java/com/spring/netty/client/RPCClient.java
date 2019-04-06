@@ -96,11 +96,11 @@ public class RPCClient {
         return channel;
     }
 
-    // TODO: 关键，通过serviceInfo去发现服务
     private RPCClient() {
         loadBalance = RPC.getClientConfig().getLoadBalance();
     }
 
+    // TODO: 关键，通过serviceInfo去发现服务
     public void send(Request request) throws ProvidersNoFoundException {
         // 选出Ip
         try {
@@ -109,16 +109,6 @@ public class RPCClient {
 
             // 通过connect获得channel
             Channel channel = connect(address);
-            // 使用channel传递数据
-
-            // TODO: 待续，没有阻塞等待连接完成
-            /*if (ClientHandler.ctx == null) {
-                lock.lock();
-                System.out.println("wait connect success ...");
-                condition.await();
-                lock.unlock();
-            }*/
-
             // send request
             String requestJson = null;
             try {
@@ -126,7 +116,6 @@ public class RPCClient {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             assert requestJson != null;
             ByteBuf byteBuffer = Unpooled.copiedBuffer(requestJson.getBytes());
             channel.writeAndFlush(byteBuffer);
