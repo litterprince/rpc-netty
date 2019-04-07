@@ -50,7 +50,7 @@ public class ZKServerService {
     }
 
     //获得这个服务所有的提供者 包含监听注册
-    public List<String> getAllServiceIP(String serviceName) throws KeeperException {
+    public List<String> getAllServiceAddress(String serviceName) throws KeeperException {
         ZKTempZNodes zkTempZnodes = new ZKTempZNodes(zooKeeper);
         IPWatcher ipWatcher = new IPWatcher(zooKeeper);
         return zkTempZnodes.getPathChildren(Constant.ROOT_PATH + Constant.SERVICE_PATH + "/" + serviceName + Constant.PROVIDERS_PATH, ipWatcher);

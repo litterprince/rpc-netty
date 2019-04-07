@@ -13,6 +13,8 @@
         </property>
         <!-- TODO: 学习，负载策略的可配置化 -->
         <property name="loadBalance" ref="random"/>
+        <property name="poolMaxIdle" value="10"/>
+        <property name="poolMaxTotal" value="10"/>
     </bean>
     <bean id="random" class="com.spring.netty.util.impl.RandomBalance"/>
 </beans>
