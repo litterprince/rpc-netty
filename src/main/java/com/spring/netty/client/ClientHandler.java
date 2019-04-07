@@ -14,9 +14,10 @@ public class ClientHandler extends ChannelHandlerAdapter {
         Response response = (Response) RPC.responseDecode(responseJson);
 
         assert response != null;
-        synchronized (RPCClient.getInstance().getRequestLockMap().get(response.getRequestId())){
-            // TODO: 学习，实现客户端阻塞等待
-            Request request = RPCClient.getInstance().getRequestLockMap().get(response.getRequestId());
+        RPCClient instance = RPCClient.getInstance();
+        synchronized (instance.getRequestLockMap().get(response.getRequestId())){
+            // TODO: 学习，唤醒客户端阻塞等待
+            Request request = instance.getRequestLockMap().get(response.getRequestId());
             request.setResult(response.getResult());
             request.notifyAll();
         }

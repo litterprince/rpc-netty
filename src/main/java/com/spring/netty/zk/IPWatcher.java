@@ -23,7 +23,7 @@ public class IPWatcher implements Watcher {
 
     @Override
     public void process(WatchedEvent watchedEvent) {
-        // TODO: 完善，只是处理了添加ip的情况，删除ip的情况没有处理
+        // TODO: 关键，ip节点变化后的处理（只处理了增加ip的情况）
         String path = watchedEvent.getPath();
         String serviceName = path.split("/")[3];
         RPCClient.getInstance().getServiceLockMap().get(serviceName).writeLock().lock();

@@ -11,7 +11,7 @@
                 <value>com.spring.common.service.HelloService</value>
             </set>
         </property>
-        <!-- TODO: 思考，这里接口实现的可配置化 -->
+        <!-- TODO: 学习，负载策略的可配置化 -->
         <property name="loadBalance" ref="random"/>
     </bean>
     <bean id="random" class="com.spring.netty.util.impl.RandomBalance"/>

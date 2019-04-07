@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ProxyObject {
     public static Object getProxyObject(Class cls){
         Object proxyObj = Proxy.newProxyInstance(cls.getClassLoader(), new Class<?>[]{cls}, new InvocationHandler() {
-            // TODO: 学习，使用原子包来记录次数同时保证了线程安全
             private AtomicInteger requestTimes = new AtomicInteger(0);
 
             @Override

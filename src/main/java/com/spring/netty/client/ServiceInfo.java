@@ -14,8 +14,7 @@ public class ServiceInfo {
 
     public void setServiceIPSet(List<String> newIPSet) {
         // TODO: 思考，这里为什么不直接加入set
-        Set<String> set = new HashSet<>();
-        set.addAll(newIPSet);
+        Set<String> set = new HashSet<>(newIPSet);
         this.serviceIPSet.clear();
         this.serviceIPSet.addAll(set);
     }

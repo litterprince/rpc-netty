@@ -9,7 +9,7 @@ import org.apache.zookeeper.ZooKeeper;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-// TODO: 完善，是否做成单利模式（后续支持zookeeper集群）
+// TODO: 完善，后续支持zookeeper集群
 public class ZKConnect {
     private ZooKeeper zooKeeper = null;
 
