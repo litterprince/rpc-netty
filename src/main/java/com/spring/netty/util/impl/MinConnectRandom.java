@@ -1,21 +1,23 @@
 package com.spring.netty.util.impl;
 
+import com.spring.netty.client.RPCClient;
 import com.spring.netty.exception.ProvidersNoFoundException;
-import com.spring.netty.util.LoadBalance;
-import com.spring.netty.zk.ZNodeType;
-import org.apache.zookeeper.ZooKeeper;
 
-import java.util.List;
+import java.util.Set;
 
-public class MinConnectRandom implements LoadBalance {
+public class MinConnectRandom extends AbstractRandom {
     @Override
     public String chooseAddress(String serviceName) throws ProvidersNoFoundException {
-        return null;
-    }
-
-    // TODO: 待续，完成balance方法
-    @Override
-    public void balance(ZooKeeper zooKeeper, String serviceName, List<String> zNodes, ZNodeType type) {
-
+        Set<String> addresses = RPCClient.getInstance().getServiceInfoMap().get(serviceName).getServiceIPSet();
+        String minAddress = "";
+        int minCount = -1;
+        for (String address : addresses){
+            int count = RPCClient.getInstance().getConnectionPoolMap().get(address).getCount();
+            if(count < minCount){
+                minAddress = address;
+                minCount = count;
+            }
+        }
+        return minAddress;
     }
 }

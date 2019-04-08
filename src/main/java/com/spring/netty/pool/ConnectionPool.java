@@ -1,14 +1,16 @@
 package com.spring.netty.pool;
 
 import com.spring.netty.RPC;
-import com.spring.netty.client.RPCClient;
 import io.netty.channel.Channel;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class ConnectionPool {
     private GenericObjectPool pool;
-    private String fullIp;
+    private String address;
+    private AtomicInteger count = new AtomicInteger(0);
 
     public ConnectionPool(String ip, Integer port) {
         ConnectFactory factory = new ConnectFactory(ip, port);
@@ -18,7 +20,7 @@ public class ConnectionPool {
         //最大连接数
         config.setMaxTotal(RPC.getClientConfig().getPoolMaxTotal());
         pool = new GenericObjectPool<Channel>(factory, config);
-        fullIp = ip + ":" + port;
+        address = ip + ":" + port;
 
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
@@ -29,16 +31,21 @@ public class ConnectionPool {
     }
 
     public Channel getChannel() throws Exception {
+        count.incrementAndGet();
         return (Channel) pool.borrowObject();
     }
 
-    public void releaseChannel(Channel channel){
+    public void releaseChannel(Channel channel) {
+        count.decrementAndGet();
         pool.returnObject(channel);
     }
 
-    public void destroyChannel(){
-        ((ConnectFactory)pool.getFactory()).getGroup().shutdownGracefully();
+    public void destroyChannel() {
+        ((ConnectFactory) pool.getFactory()).getGroup().shutdownGracefully();
         pool.close();
-        RPCClient.getInstance().getConnectionPoolMap().remove(fullIp);
+    }
+
+    public int getCount() {
+        return count.get();
     }
 }
