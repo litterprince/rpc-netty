@@ -6,6 +6,9 @@ import com.spring.netty.exception.ProvidersNoFoundException;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * 随机
+ */
 public class RandomBalance extends AbstractRandom {
     @Override
     public String chooseAddress(String serviceName) throws ProvidersNoFoundException {

@@ -3,8 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="clientConfig" class="com.spring.netty.config.ClientConfig">
-        <property name="host" value="localhost"/><!-- 使用zk后废弃该参数 -->
-        <property name="port" value="8080"/>
+        <property name="host" value="127.0.0.1"/>
         <property name="zookeeperHost" value="127.0.0.1:2181"/>
         <property name="serviceInterface">
             <set>
@@ -12,9 +11,10 @@
             </set>
         </property>
         <!-- TODO: 学习，负载策略的可配置化 -->
-        <property name="loadBalance" ref="random"/>
+        <property name="loadBalance" ref="consistentHashing"/>
         <property name="poolMaxIdle" value="10"/>
         <property name="poolMaxTotal" value="10"/>
     </bean>
     <bean id="random" class="com.spring.netty.util.impl.RandomBalance"/>
+    <bean id="consistentHashing" class="com.spring.netty.util.impl.ConsistentHashing"/>
 </beans>

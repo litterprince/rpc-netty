@@ -1,6 +1,7 @@
 package com.spring.netty.config;
 
 import com.spring.netty.RPC;
+import com.spring.netty.exception.ProvidersNoFoundException;
 import com.spring.netty.util.Constant;
 import com.spring.netty.util.LoadBalance;
 import com.spring.netty.zk.IPWatcher;
@@ -16,9 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ClientConfig implements ApplicationContextAware {
-    @Deprecated
     private String host;
-    private int port;
     private String zookeeperHost;
     private Set<String> serviceInterface;
     private LoadBalance loadBalance;
@@ -31,14 +30,6 @@ public class ClientConfig implements ApplicationContextAware {
 
     public void setHost(String host) {
         this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 
     public String getZookeeperHost() {
@@ -87,15 +78,10 @@ public class ClientConfig implements ApplicationContextAware {
 
         // TODO: 关键，RPCClient里服务信息的初始化
         ZooKeeper zooKeeper = new ZKConnect().clientConnect();
-        ZKTempZNodes zkTempZnodes = new ZKTempZNodes(zooKeeper);
-
-        // TODO: 待续，使用balance方法
-        for (String serviceName : serviceInterface) {
-            IPWatcher ipWatcher = new IPWatcher(zooKeeper);
-            String path = Constant.ROOT_PATH + Constant.SERVICE_PATH + "/" +
-                    serviceName + Constant.PROVIDERS_PATH;
-            List<String> addresses = zkTempZnodes.getPathChildren(path, ipWatcher);
-            loadBalance.balance(zooKeeper, serviceName, addresses, ZNodeType.CONSUMER);
+        try {
+            loadBalance.balanceAll(zooKeeper, serviceInterface, ZNodeType.CONSUMER);
+        } catch (ProvidersNoFoundException e) {
+            e.printStackTrace();
         }
     }
 }

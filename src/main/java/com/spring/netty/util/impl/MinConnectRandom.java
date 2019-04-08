@@ -5,6 +5,9 @@ import com.spring.netty.exception.ProvidersNoFoundException;
 
 import java.util.Set;
 
+/**
+ * 最小连接
+ */
 public class MinConnectRandom extends AbstractRandom {
     @Override
     public String chooseAddress(String serviceName) throws ProvidersNoFoundException {

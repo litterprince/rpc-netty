@@ -1,6 +1,7 @@
 package com.spring.netty.zk;
 
 import com.spring.netty.RPC;
+import com.spring.netty.exception.ProvidersNoFoundException;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -27,7 +28,7 @@ public class IPWatcher implements Watcher {
             // 新增情况处理
             List<String> newAddress = zooKeeper.getChildren(path, this);
             RPC.getClientConfig().getLoadBalance().balance(zooKeeper, serviceName, newAddress, ZNodeType.CONSUMER);
-        } catch (KeeperException | InterruptedException e) {
+        } catch (KeeperException | InterruptedException | ProvidersNoFoundException e) {
             e.printStackTrace();
         }
     }

@@ -1,6 +1,7 @@
 package com.spring.netty.zk;
 
 import com.spring.netty.RPC;
+import com.spring.netty.exception.ProvidersNoFoundException;
 import com.spring.netty.util.LoadBalance;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
@@ -26,7 +27,7 @@ public class ConsumerWatcher implements Watcher {
             List<String> children = zooKeeper.getChildren(path, this);
             LoadBalance loadBalance = RPC.getClientConfig().getLoadBalance();
             loadBalance.balance(zooKeeper, serviceName, children, ZNodeType.CONSUMER);
-        } catch (KeeperException | InterruptedException e) {
+        } catch (KeeperException | InterruptedException | ProvidersNoFoundException e) {
             e.printStackTrace();
         }
     }
