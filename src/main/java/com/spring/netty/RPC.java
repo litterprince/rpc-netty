@@ -19,7 +19,6 @@ import java.io.IOException;
 public class RPC {
     public static ApplicationContext serverContext;
     public static ApplicationContext clientContext;
-    //是否有线程安全问题（结论：经过网上查找结论是线程安全）
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     public static Object call(Class cls) {

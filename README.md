@@ -8,5 +8,8 @@
 - 注册中心：单机zookeeper
 - 负载均衡策略：随机
 
+### 新特性
+- channel池化
+
 ### 参考
 - https://blog.csdn.net/we_phone/article/details/79053472

@@ -1,13 +1,12 @@
 package com.spring.netty.config;
 
 import com.spring.netty.RPC;
-import com.spring.netty.client.RPCClient;
-import com.spring.netty.client.ServiceInfo;
-import com.spring.netty.pool.ConnectionPool;
+import com.spring.netty.util.Constant;
 import com.spring.netty.util.LoadBalance;
+import com.spring.netty.zk.IPWatcher;
 import com.spring.netty.zk.ZKConnect;
-import com.spring.netty.zk.ZKServerService;
-import org.apache.zookeeper.KeeperException;
+import com.spring.netty.zk.ZKTempZNodes;
+import com.spring.netty.zk.ZNodeType;
 import org.apache.zookeeper.ZooKeeper;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -15,7 +14,6 @@ import org.springframework.context.ApplicationContextAware;
 
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ClientConfig implements ApplicationContextAware {
     @Deprecated
@@ -88,23 +86,16 @@ public class ClientConfig implements ApplicationContextAware {
         RPC.clientContext = applicationContext;
 
         // TODO: 关键，RPCClient里服务信息的初始化
-        ZooKeeper zk = new ZKConnect().clientConnect();
-        ZKServerService zkServerService = new ZKServerService(zk);
-        try {
-            for (String serviceName : serviceInterface) {
-                List<String> addresses = zkServerService.getAllServiceAddress(serviceName);
-                for (String address : addresses) {
-                    String ip = address.split(":")[0];
-                    int port = Integer.parseInt(address.split(":")[1]);
-                    RPCClient.getInstance().getConnectionPoolMap().putIfAbsent(address, new ConnectionPool(ip, port));
-                }
-                ServiceInfo serviceInfo = new ServiceInfo();
-                serviceInfo.setServiceIPSet(addresses);
-                RPCClient.getInstance().getServiceInfoMap().putIfAbsent(serviceName, serviceInfo);
-                RPCClient.getInstance().getServiceLockMap().putIfAbsent(serviceName, new ReentrantReadWriteLock());
-            }
-        } catch (KeeperException e) {
-            e.printStackTrace();
+        ZooKeeper zooKeeper = new ZKConnect().clientConnect();
+        ZKTempZNodes zkTempZnodes = new ZKTempZNodes(zooKeeper);
+
+        // TODO: 待续，使用balance方法
+        for (String serviceName : serviceInterface) {
+            IPWatcher ipWatcher = new IPWatcher(zooKeeper);
+            String path = Constant.ROOT_PATH + Constant.SERVICE_PATH + "/" +
+                    serviceName + Constant.PROVIDERS_PATH;
+            List<String> addresses = zkTempZnodes.getPathChildren(path, ipWatcher);
+            loadBalance.balance(zooKeeper, serviceName, addresses, ZNodeType.CONSUMER);
         }
     }
 }
