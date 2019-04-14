@@ -3,6 +3,7 @@ package com.spring.netty.client;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 
+@Deprecated
 public class IPChannelInfo {
     private Channel channel;
 

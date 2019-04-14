@@ -4,9 +4,8 @@ import com.spring.netty.RPC;
 import com.spring.netty.exception.ProvidersNoFoundException;
 import com.spring.netty.message.Request;
 import com.spring.netty.pool.ConnectionPool;
+import com.spring.netty.protocol.Protocol;
 import com.spring.netty.util.LoadBalance;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import java.util.Map;
@@ -45,7 +44,7 @@ public class RPCClient {
     }
 
     // TODO: 关键，通过serviceInfo去发现服务
-    public void send(Request request) throws ProvidersNoFoundException {
+    public void send(Request request) {
         // 选出Ip
         try {
             String className = request.getClassName();
@@ -54,15 +53,17 @@ public class RPCClient {
             // 通过连接池获取channel
             Channel channel = connectionPoolMap.get(address).getChannel();
             // send request
-            String requestJson = null;
+            /*String requestJson = null;
             try {
                 requestJson = RPC.requestEncode(request);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             assert requestJson != null;
-            ByteBuf byteBuffer = Unpooled.copiedBuffer(requestJson.getBytes());
-            channel.writeAndFlush(byteBuffer);
+            ByteBuf byteBuffer = Unpooled.copiedBuffer(requestJson.getBytes());*/
+            Protocol protocol = new Protocol();
+            protocol.buildRequestProtocol(request);
+            channel.writeAndFlush(protocol);
             // 使用完释放channel
             connectionPoolMap.get(address).releaseChannel(channel);
 
@@ -70,7 +71,6 @@ public class RPCClient {
                 // TODO: 学习，实现客户端阻塞等待
                 request.wait();
             }
-            System.out.println("调用" + request.getRequestId() + "接收完毕:" + request.getResult().toString());
 
         } catch (Exception e) {
             e.printStackTrace();

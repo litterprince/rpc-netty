@@ -4,6 +4,7 @@ public class Request {
     private String requestId;
     private String className;
     private String methodName;
+    private Class<?>[] paraTypes;
     private Object[] parameters;
     private Object result;
 
@@ -29,6 +30,14 @@ public class Request {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
+    }
+
+    public Class<?>[] getParaTypes() {
+        return paraTypes;
+    }
+
+    public void setParaTypes(Class<?>[] paraTypes) {
+        this.paraTypes = paraTypes;
     }
 
     public Object[] getParameters() {

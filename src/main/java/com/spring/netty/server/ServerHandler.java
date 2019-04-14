@@ -3,6 +3,7 @@ package com.spring.netty.server;
 import com.spring.netty.RPC;
 import com.spring.netty.message.Request;
 import com.spring.netty.message.Response;
+import com.spring.netty.protocol.Protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -19,23 +20,23 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        String requestJson = (String) msg;
-        System.out.println("receive request:" + requestJson);
-        Request request = RPC.requestDecode(requestJson);
+        Protocol protocol = (Protocol) msg;
+        Request request = protocol.buildRequestByProtocol();
         Object result = invoke(request);
-        //netty的write方法并没有直接写入通道(为避免多次唤醒多路复用选择器)
-        //而是把待发送的消息放到缓冲数组中，flush方法再全部写到通道中
 
-        //记得加分隔符 不然客户端一直不会处理
+        // TODO：思考这里当时直接使用接收到的protocol传送回去会失败问题
+        Protocol protocol1 = new Protocol();
+        protocol1.buildRequestProtocol(request);
         Response response = new Response();
         response.setRequestId(request.getRequestId());
         response.setResult(result);
-        String respStr = RPC.responseEncode(response);
-        ByteBuf responseBuf = Unpooled.copiedBuffer(respStr.getBytes());
-        ctx.writeAndFlush(responseBuf);
+        protocol1.buildResponseProtocol(response);
+        /*String respStr = RPC.responseEncode(response);
+        ByteBuf responseBuf = Unpooled.copiedBuffer(respStr.getBytes());*/
+        ctx.writeAndFlush(protocol1);
     }
 
-    public static Object invoke(Request request){
+    private static Object invoke(Request request){
         Object result = null;
         String implClassName = RPC.getServerConfig().getServerImplMap().get(request.getClassName());
         try {

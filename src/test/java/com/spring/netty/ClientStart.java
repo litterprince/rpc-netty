@@ -23,7 +23,7 @@ public class ClientStart {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    service.sayHello("jeff" + finalI);
+                    System.out.println(service.sayHello("jeff" + finalI));
                 }
             });
             Thread.sleep(100);

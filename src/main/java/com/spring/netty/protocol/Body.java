@@ -42,26 +42,23 @@ public class Body {
      * 参数对象内部类
      */
     class Arg {
-        /**
-         * 参数类型tag
-         */
-        private Integer argTag;
+        private Integer argNameLength;
 
         private String argName;
+
+        private Integer contentLength;
 
         /**
          * 参数内容
          */
         private byte[] content;
 
-        private Integer contentLength;
-
-        public Integer getArgTag() {
-            return argTag;
+        public Integer getArgNameLength() {
+            return argNameLength;
         }
 
-        public void setArgTag(Integer argTag) {
-            this.argTag = argTag;
+        public void setArgNameLength(Integer argNameLength) {
+            this.argNameLength = argNameLength;
         }
 
         public String getArgName() {
