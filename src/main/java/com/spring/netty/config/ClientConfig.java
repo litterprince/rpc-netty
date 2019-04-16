@@ -21,8 +21,8 @@ public class ClientConfig implements ApplicationContextAware {
     private String zookeeperHost;
     private Set<String> serviceInterface;
     private LoadBalance loadBalance;
-    private int poolMaxIdle;
-    private int poolMaxTotal;
+    private int poolMaxIdle = 2;
+    private int poolMaxTotal = 4;
 
     public String getHost() {
         return host;

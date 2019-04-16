@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 
-// TODO：待续，完成自定义协议
+// TODO：关键，自定义协议
 public class Decoder extends LineBasedFrameDecoder {
     public Decoder(int maxLength) {
         super(maxLength);

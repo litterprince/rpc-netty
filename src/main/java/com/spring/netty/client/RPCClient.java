@@ -68,7 +68,6 @@ public class RPCClient {
             connectionPoolMap.get(address).releaseChannel(channel);
 
             synchronized (request) {
-                // TODO: 学习，实现客户端阻塞等待
                 request.wait();
             }
 

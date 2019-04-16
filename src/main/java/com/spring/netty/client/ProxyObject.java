@@ -28,7 +28,6 @@ public class ProxyObject {
                 return request.getResult();//目标方法的返回结果
             }
 
-            // TODO: 学习，生成requestId的方式
             private String buildRequestId(String methodName) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(requestTimes.incrementAndGet()).append("-");

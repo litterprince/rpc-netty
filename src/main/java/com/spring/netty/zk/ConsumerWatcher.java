@@ -19,7 +19,6 @@ public class ConsumerWatcher implements Watcher {
 
     @Override
     public void process(WatchedEvent watchedEvent) {
-        // TODO: 待续，使用balance方法
         String path = watchedEvent.getPath();
         String[] pathArr = path.split("/");
         String serviceName = pathArr[2];//第三个部分则为服务名

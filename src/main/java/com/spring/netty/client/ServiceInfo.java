@@ -1,5 +1,7 @@
 package com.spring.netty.client;
 
+import com.google.common.collect.Sets;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,10 +12,9 @@ public class ServiceInfo {
     private AtomicInteger index = new AtomicInteger(0);
 
     //这个服务所连接的提供者IP Set 只能由负载均衡类操作
-    private Set<String> serviceIPSet = new HashSet<>();
+    private Set<String> serviceIPSet = Sets.newConcurrentHashSet();
 
     public void setServiceIPSet(List<String> newIPSet) {
-        // TODO: 思考，这里为什么不直接加入set
         Set<String> set = new HashSet<>(newIPSet);
         this.serviceIPSet.clear();
         this.serviceIPSet.addAll(set);
