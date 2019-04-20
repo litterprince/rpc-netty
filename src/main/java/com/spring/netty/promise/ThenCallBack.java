@@ -1,5 +1,5 @@
 package com.spring.netty.promise;
 
-public interface ThenCallBack {
-    Promise done();
+public interface ThenCallBack<T> {
+    Promise done(T result);
 }

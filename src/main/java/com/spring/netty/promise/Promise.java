@@ -4,4 +4,6 @@ public interface Promise {
     Promise then(ThenCallBack thenCallBack);
 
     Promise success(SuccessCallBack successCallBack);
+
+    Promise fail(FailCallBack failCallBack);
 }
