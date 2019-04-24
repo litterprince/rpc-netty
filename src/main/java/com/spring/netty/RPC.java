@@ -28,7 +28,7 @@ public class RPC {
         return Proxy.newProxyInstance(cls.getClassLoader(), new Class<?>[]{cls}, handler);
     }
 
-    static void serverStart() {
+    public static void serverStart() {
         // TODO: 关键，服务的上报和监控
         ZooKeeper zk = new ZKConnect().serverConnect();
         ZKServerService serverService = new ZKServerService(zk);

@@ -55,4 +55,12 @@ public class Request {
     public void setResult(Object result) {
         this.result = result;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Request target = (Request) obj;
+        if (!target.getRequestId().equals(this.getRequestId()))
+            return false;
+        return true;
+    }
 }

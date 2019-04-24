@@ -17,6 +17,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <spring.version>5.0.7.RELEASE</spring.version>
+        <log4j2.version>2.6.1</log4j2.version>
     </properties>
 
     <dependencies>
@@ -73,6 +74,33 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
+        <!-- 日志 -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <!-- 使用异步写日志功能 必须引入此包-->
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>3.3.6</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -120,4 +148,28 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <!-- 开发环境 -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <!-- 以下配置properties中用到一些变量，如数据库连接参数、日志打印等 -->
+            <properties>
+                <!-- DB Resource -->
+                <jdbc_driverClassName>com.mysql.jdbc.Driver</jdbc_driverClassName>
+                <jdbc_url>jdbc:mysql://localhost:3306/learning</jdbc_url>
+                <jdbc_username>root</jdbc_username>
+                <jdbc_password>123456</jdbc_password>
+
+                <log.moduleName>rpc-netty</log.moduleName>
+                <log.base>/wangzhe/home/logs</log.base>
+                <log.other.level>DEBUG</log.other.level>
+                <log.root.level>DEBUG</log.root.level>
+                <log.stdout.ref><![CDATA[<appender-ref ref="stdout" />]]></log.stdout.ref>
+            </properties>
+        </profile>
+    </profiles>
 </project>
